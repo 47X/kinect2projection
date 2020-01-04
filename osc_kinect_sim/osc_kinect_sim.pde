@@ -1,33 +1,43 @@
+//simulates body tracking for testing purposes
+//reads mouse and sends as kinect person position
  
+import codeanticode.tablet.*;
 import oscP5.*;
 import netP5.*;
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+Tablet tablet;
 
-String[] simlines;
 
 void setup() {
-  size(400,400);
-  frameRate(25);
+  size(640,480);
+  frameRate(30);
 
   //OSC
   oscP5 = new OscP5(this,12000);
   myRemoteLocation = new NetAddress("127.0.0.1",12001);
 
-  //load sim data into array
-  simlines = loadStrings("capture.txt");
+  //tablet
+  tablet = new Tablet(this); 
+  
 }
 
 
 void draw() {
   background(0);
-  //load lines in loop one at a time
-  String line = simlines[frameCount%simlines.length];
-  //split into tokens
-  String[] pieces = split(line, ' ');
-  //cast from string to apropriate datatypes and send via osc
-  fakeKinect(int(pieces[0]), float(pieces[1]), float(pieces[2]), int(pieces[3]));
+  int x = mouseX;
+  int y = mouseY;
+  int d= max(20,int(tablet.getPressure()*600));
+  
+  fill(250,50,50);
+  ellipse(x, y, d, d);
+  
+  fill(255);
+  String pos = str(x)+","+str(y)+","+str(d);
+  text(pos, x, y);
+  
+  fakeKinect(1, float(x), y , d);
 }
 
 

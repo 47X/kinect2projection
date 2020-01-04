@@ -18,11 +18,27 @@ void setup() {
 
 void draw() {
   background(0);  
-  fill(250,50,50);
-  ellipse(user1[0], user1[2], user1[1], user1[1]);
-  fill(50,50,250);
-  ellipse(user2[0], user2[2], user2[1], user2[1]);
-
+  //fill(250,50,50);
+  //ellipse(user1[0], user1[2], user1[1], user1[1]);
+  //fill(50,50,250);
+  //ellipse(user2[0], user2[2], user2[1], user2[1]);
+  
+  fill(80,50,200);
+  float[] real1 = toFloatSpace(int(user1[0]), int(user1[1]), int(user1[2]));
+  ellipse(real1[0]*width, real1[1]*height, 100,100);
+  
+  fill(255);
+  String pos = nf(real1[0],1,2)+", "+nf(real1[1],1,2)+", "+nf(real1[2],1,2);
+  text(pos, real1[0]*width, real1[1]*height);
+  
+  fill(50,80,150);
+  float[] real2 = toFloatSpace(int(user2[0]), int(user2[1]), int(user2[2]));
+  ellipse(real2[0]*width, real2[1]*height, 100,100);
+  
+  fill(255);
+  String pos2 = nf(real2[0],1,2)+", "+nf(real2[1],1,2)+", "+nf(real2[2],1,2);
+  text(pos2, real2[0]*width, real2[1]*height);
+ 
 }
 
 void mousePressed() { 
