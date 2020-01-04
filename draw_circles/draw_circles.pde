@@ -1,8 +1,10 @@
 import oscP5.*;
 import netP5.*;
+import spout.*;
 
 OscP5 oscP5;
 NetAddress myRemoteLocation;
+Spout spout;
 
 float[] user1={0,0,0};
 float[] user2={0,0,0};
@@ -13,6 +15,9 @@ void setup() {
   /* start oscP5, listening for incoming messages at port 12000 */
   oscP5 = new OscP5(this,12001);
   myRemoteLocation = new NetAddress("127.0.0.1",12000);
+  //spout
+  spout = new Spout(this);
+  spout.createSender("Spout Processing");
 }
 
 
@@ -38,7 +43,8 @@ void draw() {
   fill(255);
   String pos2 = nf(real2[0],1,2)+", "+nf(real2[1],1,2)+", "+nf(real2[2],1,2);
   text(pos2, real2[0]*width, real2[1]*height);
- 
+  
+  spout.sendTexture();
 }
 
 void mousePressed() { 
