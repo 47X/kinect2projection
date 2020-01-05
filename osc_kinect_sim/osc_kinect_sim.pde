@@ -8,7 +8,7 @@ import netP5.*;
 OscP5 oscP5;
 NetAddress myRemoteLocation;
 Tablet tablet;
-
+float mouseWheel = 500;  
 
 void setup() {
   size(640,480);
@@ -28,10 +28,10 @@ void draw() {
   background(0);
   int x = mouseX;
   int y = mouseY;
-  int d= max(20,int(tablet.getPressure()*600));
+  int d= max(20+int(mouseWheel),int(tablet.getPressure()*600));
   
   fill(250,50,50);
-  ellipse(x, y, d, d);
+  ellipse(x, y, 600-d, 600-d);
   
   fill(255);
   String pos = str(x)+","+str(y)+","+str(d);
@@ -40,6 +40,11 @@ void draw() {
   fakeKinect(1, float(x), y , d);
 }
 
+void mouseWheel(MouseEvent event) {
+  float e = event.getCount();
+  mouseWheel+=(e*5);
+  println(mouseWheel);
+}
 
 void fakeKinect(int id, float x, float y, int z){
   OscMessage myMessage = new OscMessage("/kinect");

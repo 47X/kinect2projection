@@ -10,7 +10,7 @@ float[] user1={0,0,0};
 float[] user2={0,0,0};
 
 void setup() {
-  size(1280,800);
+  size(1280,800, P3D);
   frameRate(25);
   /* start oscP5, listening for incoming messages at port 12000 */
   oscP5 = new OscP5(this,12001);
