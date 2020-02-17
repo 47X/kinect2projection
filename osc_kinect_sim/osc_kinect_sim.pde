@@ -16,7 +16,7 @@ void setup() {
 
   //OSC
   oscP5 = new OscP5(this,12000);
-  myRemoteLocation = new NetAddress("127.0.0.1",12001);
+  myRemoteLocation = new NetAddress("127.0.0.1",6666);
 
   //tablet
   tablet = new Tablet(this); 
@@ -37,7 +37,7 @@ void draw() {
   String pos = str(x)+","+str(y)+","+str(d);
   text(pos, x, y);
   
-  fakeKinect(1, float(x), y , d);
+  fakeKinect(2, float(x), float(d) , height-y);
 }
 
 void mouseWheel(MouseEvent event) {
@@ -47,7 +47,7 @@ void mouseWheel(MouseEvent event) {
 }
 
 void fakeKinect(int id, float x, float y, int z){
-  OscMessage myMessage = new OscMessage("/kinect");
+  OscMessage myMessage = new OscMessage("/userOn");
   myMessage.add(id);
   myMessage.add(x);
   myMessage.add(y);
@@ -60,7 +60,7 @@ void fakeKinect(int id, float x, float y, int z){
 
 void mousePressed() {
   /* in the following different ways of creating osc messages are shown by example */
-  OscMessage myMessage = new OscMessage("/kinect");
+  OscMessage myMessage = new OscMessage("/onUser");
 
   myMessage.add(123); /* add an int to the osc message */
 

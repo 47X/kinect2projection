@@ -8,22 +8,23 @@ NetAddress myRemoteLocation;
 String[] simlines;
 
 void setup() {
-  size(400,400);
-  frameRate(25);
+  size(300,100);
+  frameRate(30);
 
   //OSC
-  oscP5 = new OscP5(this,12000);
-  myRemoteLocation = new NetAddress("127.0.0.1",12001);
+  oscP5 = new OscP5(this,6667);
+  myRemoteLocation = new NetAddress("127.0.0.1",6666);
 
   //load sim data into array
-  simlines = loadStrings("capture.txt");
+  simlines = loadStrings("positions_31.txt");
 }
 
 
 void draw() {
   background(0);
+  frameRate(30);
   //load lines in loop one at a time
-  String line = simlines[frameCount%simlines.length];
+  String line = simlines[frameCount%(simlines.length-1)];
   //split into tokens
   String[] pieces = split(line, ' ');
   //cast from string to apropriate datatypes and send via osc
@@ -32,7 +33,7 @@ void draw() {
 
 
 void fakeKinect(int id, float x, float y, int z){
-  OscMessage myMessage = new OscMessage("/kinect");
+  OscMessage myMessage = new OscMessage("/userOn");
   myMessage.add(id);
   myMessage.add(x);
   myMessage.add(y);
@@ -45,7 +46,7 @@ void fakeKinect(int id, float x, float y, int z){
 
 void mousePressed() {
   /* in the following different ways of creating osc messages are shown by example */
-  OscMessage myMessage = new OscMessage("/kinect");
+  OscMessage myMessage = new OscMessage("/userOn");
 
   myMessage.add(123); /* add an int to the osc message */
 
