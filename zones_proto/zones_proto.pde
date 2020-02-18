@@ -25,6 +25,7 @@ void draw(){
         ellipse(u1x, u1y, 10, 10);
         fill(60,255,60,60);
         ellipse(u2x, u2y, 10, 10);
+
         data.updateZones(currentSceneIndex);
         data.interactZones(currentSceneIndex, u1x, u1y, u2x, u2y);
         data.oscZones(currentSceneIndex);
@@ -32,7 +33,7 @@ void draw(){
         if(zonesEditingMode) {
                 fill(255);
                 text("editing scene number "+(currentSceneIndex+1) +" index "+ currentSceneIndex, 20, 20);
-                text(" numbers to select, arrows to move, =/- to resize, a to de/activate", 20,40);
+                text(" numbers to select, arrows to move, =/- to resize, a to de/activate, ,. to change reso layer", 20,40);
         }
 };
 

@@ -41,7 +41,8 @@ void oscZones(int currentSceneIndex){
                 float st = zones[currentSceneIndex][i].state;
                 int lay = zones[currentSceneIndex][i].layer;
                 boolean active = zones[currentSceneIndex][i].active;
-                if(active) {
+                boolean editing = zones[currentSceneIndex][i].editing;
+                if((active&&(st>0))||editing) {
                         resoPosF(x,y,st,lay);
                         //println("sending "+x +" " +y +" "+st+" to layer "+lay);
                 }
