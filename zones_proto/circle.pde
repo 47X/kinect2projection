@@ -8,12 +8,15 @@ class Zone {//implements Serializable {
   //inetraction with stage
   float state = 0f; //is user over this?
   float speed = 0.05; //how fast it changes state
+  int layer;
 
- Zone(int px, int py, int pd, int _id){
+
+ Zone(int px, int py, int pd, int _id, int _layer){
    x=px;
    y=py;
    d=pd;
    id=_id;
+   layer = _layer;
    c = color(random(1)*255, random(1)*255, random(1)*255, 100);
  }
 
@@ -26,6 +29,7 @@ class Zone {//implements Serializable {
     fill(255);
     textMode(CENTER);
     text("id:"+str(id), x, y);
+    text("layer:"+str(layer), x, y+10);
   } else {
     if(active){
     noStroke();
@@ -36,6 +40,7 @@ class Zone {//implements Serializable {
     fill(255);
     textMode(CENTER);
     text("id:"+str(id), x, y);
+    text("layer:"+str(layer), x, y+10);
     }
   }
 
@@ -52,7 +57,7 @@ class Zone {//implements Serializable {
  }
 
  void sendToReso(){
-
+   
  }
 
  String toString(){
@@ -61,7 +66,8 @@ class Zone {//implements Serializable {
      str(y) +";"+
      str(d) +";"+
      str(id) +";"+
-     str(active) +";";
+     str(active) +";"+
+     str(layer) +";";
    return s;
  }
 

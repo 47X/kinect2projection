@@ -8,7 +8,7 @@ public Zone[][] zones = new Zone[9][9];
       println(" created zone id : ");
       for(int j = 0; j<zones.length; j++){
         for(int i = 0; i<zones[j].length; i++){
-          zones[j][i] = new Zone((i+1)*80, (j+1)*80, (i+1)*(j+1)*10, (j*10)+i);
+          zones[j][i] = new Zone((i+1)*80, (j+1)*80, (i+1)*(j+1)*10, (j*10)+i, i+2);
           print(zones[j][i].id+", ");
         }
       }
@@ -50,6 +50,7 @@ public Zone[][] zones = new Zone[9][9];
             zones[y][i].d = int(pieces[2]);
             zones[y][i].id = int(pieces[3]);
             zones[y][i].active = boolean(pieces[4]);
+            zones[y][i].layer = int(pieces[5]);
             li++;
             }
           }

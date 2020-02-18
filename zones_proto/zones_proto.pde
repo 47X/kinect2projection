@@ -2,12 +2,8 @@ int currentSceneIndex = 0; //current scene
 boolean zonesEditingMode = false;
 int selectedZone=0;
 
-//int[][] scenes;
-
-//Zone[][] zones;
 Scenes data;
-String filename = "testdata.txt";//new File (sketchPath("") + "mydata");
-
+String filename = "testdata.txt";
 
 
 ///P3D!!!!
@@ -16,22 +12,15 @@ void setup(){
   frameRate(30);
 
   data = new Scenes();
-  // //make 8 zones
-  // zones = new Zone[5][8];
-  // for(int j = 0; j<zones.length; j++){
-  //   for(int i = 0; i<zones[j].length; i++){
-  //     zones[j][i] = new Zone(int(random(1)*width), int(random(1)*height), int(50+random(1)*100), i+1);
-  //   }
-  // }
 
 }
 
 void draw(){
   clear();
-  int u1x = float(mouseX);
-  int u1y = float(mouseY);
-  int u2x = float(mouseY);
-  int u2y = float(mouseX);
+  float u1x = float(mouseX);
+  float u1y = float(mouseY);
+  float u2x = float(mouseY);
+  float u2y = float(mouseX);
   fill(255,60,60,60);
   ellipse(u1x, u1y, 10, 10);
   fill(60,255,60,60);
@@ -47,12 +36,6 @@ void draw(){
   }
 };
 
-
- // void updateZones(){
- //   for(int i=0; i< zones[currentSceneIndex].length; i++){
- //     zones[currentSceneIndex][i].update();
- //   }
- // }
 
 void keyPressed(){
   switch(key){
@@ -83,7 +66,7 @@ void keyPressed(){
           }
     //arrows
     if(key == CODED){
-      println("code: "+ keyCode);
+      //println("code: "+ keyCode);
       switch(keyCode){
         case UP:
           data.zones[currentSceneIndex][selectedZone].y--;
@@ -106,6 +89,12 @@ void keyPressed(){
         break;
         case '=':
           data.zones[currentSceneIndex][selectedZone].d++;
+        break;
+        case ',':
+          data.zones[currentSceneIndex][selectedZone].layer--;
+        break;
+        case '.':
+          data.zones[currentSceneIndex][selectedZone].layer++;
         break;
         case 'a':
           data.zones[currentSceneIndex][selectedZone].active = !data.zones[currentSceneIndex][selectedZone].active;

@@ -18,12 +18,8 @@ int currentSceneIndex = 0; //current scene
 boolean zonesEditingMode = false;
 int selectedZone=0;
 
-//int[][] scenes;
-
-//Zone[][] zones;
 Scenes data;
-String filename = "testdata.txt";//new File (sketchPath("") + "mydata");
-
+String filename = "testdata.txt";
 
 
 ///P3D!!!!
@@ -32,22 +28,15 @@ public void setup(){
   frameRate(30);
 
   data = new Scenes();
-  // //make 8 zones
-  // zones = new Zone[5][8];
-  // for(int j = 0; j<zones.length; j++){
-  //   for(int i = 0; i<zones[j].length; i++){
-  //     zones[j][i] = new Zone(int(random(1)*width), int(random(1)*height), int(50+random(1)*100), i+1);
-  //   }
-  // }
 
 }
 
 public void draw(){
   clear();
-  int u1x = mouseX;
-  int u1y = mouseY;
-  int u2x = mouseY;
-  int u2y = mouseX;
+  float u1x = PApplet.parseFloat(mouseX);
+  float u1y = PApplet.parseFloat(mouseY);
+  float u2x = PApplet.parseFloat(mouseY);
+  float u2y = PApplet.parseFloat(mouseX);
   fill(255,60,60,60);
   ellipse(u1x, u1y, 10, 10);
   fill(60,255,60,60);
@@ -63,12 +52,6 @@ public void draw(){
   }
 };
 
-
- // void updateZones(){
- //   for(int i=0; i< zones[currentSceneIndex].length; i++){
- //     zones[currentSceneIndex][i].update();
- //   }
- // }
 
 public void keyPressed(){
   switch(key){
@@ -99,7 +82,7 @@ public void keyPressed(){
           }
     //arrows
     if(key == CODED){
-      println("code: "+ keyCode);
+      //println("code: "+ keyCode);
       switch(keyCode){
         case UP:
           data.zones[currentSceneIndex][selectedZone].y--;
@@ -122,6 +105,12 @@ public void keyPressed(){
         break;
         case '=':
           data.zones[currentSceneIndex][selectedZone].d++;
+        break;
+        case ',':
+          data.zones[currentSceneIndex][selectedZone].layer--;
+        break;
+        case '.':
+          data.zones[currentSceneIndex][selectedZone].layer++;
         break;
         case 'a':
           data.zones[currentSceneIndex][selectedZone].active = !data.zones[currentSceneIndex][selectedZone].active;
@@ -172,12 +161,15 @@ class Zone {//implements Serializable {
   //inetraction with stage
   float state = 0f; //is user over this?
   float speed = 0.05f; //how fast it changes state
+  int layer;
 
- Zone(int px, int py, int pd, int _id){
+
+ Zone(int px, int py, int pd, int _id, int _layer){
    x=px;
    y=py;
    d=pd;
    id=_id;
+   layer = _layer;
    c = color(random(1)*255, random(1)*255, random(1)*255, 100);
  }
 
@@ -190,6 +182,7 @@ class Zone {//implements Serializable {
     fill(255);
     textMode(CENTER);
     text("id:"+str(id), x, y);
+    text("layer:"+str(layer), x, y+10);
   } else {
     if(active){
     noStroke();
@@ -200,6 +193,7 @@ class Zone {//implements Serializable {
     fill(255);
     textMode(CENTER);
     text("id:"+str(id), x, y);
+    text("layer:"+str(layer), x, y+10);
     }
   }
 
@@ -225,7 +219,8 @@ class Zone {//implements Serializable {
      str(y) +";"+
      str(d) +";"+
      str(id) +";"+
-     str(active) +";";
+     str(active) +";"+
+     str(layer) +";";
    return s;
  }
 
@@ -241,7 +236,7 @@ public Zone[][] zones = new Zone[9][9];
       println(" created zone id : ");
       for(int j = 0; j<zones.length; j++){
         for(int i = 0; i<zones[j].length; i++){
-          zones[j][i] = new Zone((i+1)*80, (j+1)*80, (i+1)*(j+1)*10, (j*10)+i);
+          zones[j][i] = new Zone((i+1)*80, (j+1)*80, (i+1)*(j+1)*10, (j*10)+i, i+2);
           print(zones[j][i].id+", ");
         }
       }
@@ -283,6 +278,7 @@ public Zone[][] zones = new Zone[9][9];
             zones[y][i].d = PApplet.parseInt(pieces[2]);
             zones[y][i].id = PApplet.parseInt(pieces[3]);
             zones[y][i].active = PApplet.parseBoolean(pieces[4]);
+            zones[y][i].layer = PApplet.parseInt(pieces[5]);
             li++;
             }
           }
