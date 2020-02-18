@@ -155,6 +155,13 @@ public void keyPressed(){
         //   }
         // }
 }
+
+public void mouseDragged(){
+  if(zonesEditingMode){
+    data.zones[currentSceneIndex][selectedZone].x = mouseX;
+    data.zones[currentSceneIndex][selectedZone].y = mouseY;
+  }
+}
 class Zone {//implements Serializable {
 
 int x, y, d;
@@ -187,6 +194,7 @@ public void update(){
                 textMode(CENTER);
                 text("id:"+str(id), x, y);
                 text("layer:"+str(layer), x, y+10);
+                text("xyd: "+str(x)+","+str(y)+","+str(d), x, y+20);
         } else {
                 if(active) {
                         noStroke();
@@ -198,6 +206,7 @@ public void update(){
                         textMode(CENTER);
                         text("id:"+str(id), x, y);
                         text("layer:"+str(layer), x, y+10);
+                        text("xyd: "+str(x)+","+str(y)+","+str(d), x, y+20);
                 }
         }
 
@@ -265,21 +274,23 @@ public void interactZones(int currentSceneIndex, float u1x, float u1y, float u2x
 
 public void oscZones(int currentSceneIndex){
         for(int i=0; i< zones[currentSceneIndex].length; i++) {
-                float x = resoNorm(zones[currentSceneIndex][i].x, 1280); ///!!! SIZE
-                float y = resoNorm(zones[currentSceneIndex][i].y, 800);
-                float st = zones[currentSceneIndex][i].state;
+                // float x = resoNorm(, 1280); ///!!! size
+                // float y = resoNorm(zones[currentSceneIndex][i].y, 800);
+                PVector pos = new PVector();
+                pos = resoPosition(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y);
+                float st = 1 - zones[currentSceneIndex][i].state;
                 int lay = zones[currentSceneIndex][i].layer;
                 boolean active = zones[currentSceneIndex][i].active;
                 boolean editing = zones[currentSceneIndex][i].editing;
                 if((active&&(st>0))||editing) {
-                        resoPosF(x,y,st,lay);
+                        resoSend(pos.x,pos.y,st,lay);
                         //println("sending "+x +" " +y +" "+st+" to layer "+lay);
                 }
         }
 }
 
 
-public void resoPosF(float X, float Y, float opacity,int layer){
+public void resoSend(float X, float Y, float opacity,int layer){
         OscBundle myBundle = new OscBundle();
         //OscMessage myMessage = new OscMessage("/composition/layers/"+layer+"/clips/1/video/effects/transform/positionx");
         OscMessage myMessage = new OscMessage("/composition/layers/"+layer+"/video/effects/transform/positionx");
@@ -299,6 +310,15 @@ public void resoPosF(float X, float Y, float opacity,int layer){
 
 public float resoNorm(int X, int max){
         return (X - (max / 2) + 16384) / 32768f;
+}
+
+public PVector resoPosition(float x, float y){
+  PVector pos = new PVector();
+  pos.x = norm((x-(1280/2))/2,-16384, 16384);
+  pos.y = norm((y-(800/2))/2, -16384, 16384);
+  // pos.x = norm(x,-16384, 16384);
+  // pos.y = norm(y, -16384, 16384);
+  return pos;
 }
 
 public void saveDataToFile(String filename) {
@@ -345,7 +365,7 @@ public void loadDataFromFile(String filename) {
 
 
 }
-  public void settings() {  size(640, 400); }
+  public void settings() {  size(1280, 800, P3D); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "zones_proto" };
     if (passedArgs != null) {

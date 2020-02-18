@@ -30,6 +30,7 @@ void update(){
                 textMode(CENTER);
                 text("id:"+str(id), x, y);
                 text("layer:"+str(layer), x, y+10);
+                text("xyd: "+str(x)+","+str(y)+","+str(d), x, y+20);
         } else {
                 if(active) {
                         noStroke();
@@ -41,6 +42,7 @@ void update(){
                         textMode(CENTER);
                         text("id:"+str(id), x, y);
                         text("layer:"+str(layer), x, y+10);
+                        text("xyd: "+str(x)+","+str(y)+","+str(d), x, y+20);
                 }
         }
 

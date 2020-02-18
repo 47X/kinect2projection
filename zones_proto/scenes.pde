@@ -36,21 +36,23 @@ void interactZones(int currentSceneIndex, float u1x, float u1y, float u2x, float
 
 void oscZones(int currentSceneIndex){
         for(int i=0; i< zones[currentSceneIndex].length; i++) {
-                float x = resoNorm(zones[currentSceneIndex][i].x, 1280); ///!!! SIZE
-                float y = resoNorm(zones[currentSceneIndex][i].y, 800);
-                float st = zones[currentSceneIndex][i].state;
+                // float x = resoNorm(, 1280); ///!!! size
+                // float y = resoNorm(zones[currentSceneIndex][i].y, 800);
+                PVector pos = new PVector();
+                pos = resoPosition(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y);
+                float st = 1 - zones[currentSceneIndex][i].state;
                 int lay = zones[currentSceneIndex][i].layer;
                 boolean active = zones[currentSceneIndex][i].active;
                 boolean editing = zones[currentSceneIndex][i].editing;
                 if((active&&(st>0))||editing) {
-                        resoPosF(x,y,st,lay);
+                        resoSend(pos.x,pos.y,st,lay);
                         //println("sending "+x +" " +y +" "+st+" to layer "+lay);
                 }
         }
 }
 
 
-void resoPosF(float X, float Y, float opacity,int layer){
+void resoSend(float X, float Y, float opacity,int layer){
         OscBundle myBundle = new OscBundle();
         //OscMessage myMessage = new OscMessage("/composition/layers/"+layer+"/clips/1/video/effects/transform/positionx");
         OscMessage myMessage = new OscMessage("/composition/layers/"+layer+"/video/effects/transform/positionx");
@@ -70,6 +72,13 @@ void resoPosF(float X, float Y, float opacity,int layer){
 
 float resoNorm(int X, int max){
         return (X - (max / 2) + 16384) / 32768f;
+}
+
+PVector resoPosition(float x, float y){
+  PVector pos = new PVector();
+  pos.x = norm((x-(1280/2))/2,-16384, 16384);
+  pos.y = norm((y-(800/2))/2, -16384, 16384);
+  return pos;
 }
 
 void saveDataToFile(String filename) {

@@ -8,7 +8,7 @@ String filename = "testdata.txt";
 
 ///P3D!!!!
 void setup(){
-        size(640, 400);
+        size(1280, 800, P3D);
         frameRate(30);
 
         data = new Scenes();
@@ -135,4 +135,11 @@ void keyPressed(){
         //     break;
         //   }
         // }
+}
+
+void mouseDragged(){
+  if(zonesEditingMode){
+    data.zones[currentSceneIndex][selectedZone].x = mouseX;
+    data.zones[currentSceneIndex][selectedZone].y = mouseY;
+  }
 }
