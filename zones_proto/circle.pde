@@ -5,6 +5,9 @@ class Zone {//implements Serializable {
   boolean editing = false;
   boolean active = true;
   color c = color(100,100,100,100);
+  //inetraction with stage
+  float state = 0f; //is user over this?
+  float speed = 0.05; //how fast it changes state
 
  Zone(int px, int py, int pd, int _id){
    x=px;
@@ -28,11 +31,27 @@ class Zone {//implements Serializable {
     noStroke();
     fill(c);
     ellipse(x,y,d,d);
+    fill(200, 200, 200, 100);
+    ellipse(x,y,d*state,d*state);
     fill(255);
     textMode(CENTER);
     text("id:"+str(id), x, y);
     }
   }
+
+ }
+
+ void interact(float u1x, float u1y, float u2x, float u2y){
+   float dist1 = dist( u1x, u1y, x, y);
+   float dist2 = dist( u2x, u2y, x, y);
+   if((dist1<(d/2))||(dist2<(d/2))){
+     state = min(state + speed, 1);
+   } else {
+     state = max(state - speed, 0);
+   }
+ }
+
+ void sendToReso(){
 
  }
 

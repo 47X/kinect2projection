@@ -28,7 +28,16 @@ void setup(){
 
 void draw(){
   clear();
+  int u1x = float(mouseX);
+  int u1y = float(mouseY);
+  int u2x = float(mouseY);
+  int u2y = float(mouseX);
+  fill(255,60,60,60);
+  ellipse(u1x, u1y, 10, 10);
+  fill(60,255,60,60);
+  ellipse(u2x, u2y, 10, 10);
   data.updateZones(currentSceneIndex);
+  data.interactZones(currentSceneIndex, u1x, u1y, u2x, u2y);
 
 
   if(zonesEditingMode){

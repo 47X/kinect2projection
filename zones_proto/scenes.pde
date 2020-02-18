@@ -21,6 +21,12 @@ public Zone[][] zones = new Zone[9][9];
       }
     }
 
+    void interactZones(int currentSceneIndex, float u1x, float u1y, float u2x, float u2y){
+      for(int i=0; i< zones[currentSceneIndex].length; i++){
+        zones[currentSceneIndex][i].interact(u1x,u1y, u2x,u2y);
+      }
+    }
+
     void saveDataToFile(String filename) {
     PrintWriter output = createWriter(filename);
     for (int y=0; y<zones.length; y++){

@@ -44,7 +44,16 @@ public void setup(){
 
 public void draw(){
   clear();
+  int u1x = mouseX;
+  int u1y = mouseY;
+  int u2x = mouseY;
+  int u2y = mouseX;
+  fill(255,60,60,60);
+  ellipse(u1x, u1y, 10, 10);
+  fill(60,255,60,60);
+  ellipse(u2x, u2y, 10, 10);
   data.updateZones(currentSceneIndex);
+  data.interactZones(currentSceneIndex, u1x, u1y, u2x, u2y);
 
 
   if(zonesEditingMode){
@@ -160,6 +169,9 @@ class Zone {//implements Serializable {
   boolean editing = false;
   boolean active = true;
   int c = color(100,100,100,100);
+  //inetraction with stage
+  float state = 0f; //is user over this?
+  float speed = 0.05f; //how fast it changes state
 
  Zone(int px, int py, int pd, int _id){
    x=px;
@@ -183,11 +195,27 @@ class Zone {//implements Serializable {
     noStroke();
     fill(c);
     ellipse(x,y,d,d);
+    fill(200, 200, 200, 100);
+    ellipse(x,y,d*state,d*state);
     fill(255);
     textMode(CENTER);
     text("id:"+str(id), x, y);
     }
   }
+
+ }
+
+ public void interact(float u1x, float u1y, float u2x, float u2y){
+   float dist1 = dist( u1x, u1y, x, y);
+   float dist2 = dist( u2x, u2y, x, y);
+   if((dist1<(d/2))||(dist2<(d/2))){
+     state = min(state + speed, 1);
+   } else {
+     state = max(state - speed, 0);
+   }
+ }
+
+ public void sendToReso(){
 
  }
 
@@ -223,6 +251,12 @@ public Zone[][] zones = new Zone[9][9];
     public void updateZones(int currentSceneIndex){
       for(int i=0; i< zones[currentSceneIndex].length; i++){
         zones[currentSceneIndex][i].update();
+      }
+    }
+
+    public void interactZones(int currentSceneIndex, float u1x, float u1y, float u2x, float u2y){
+      for(int i=0; i< zones[currentSceneIndex].length; i++){
+        zones[currentSceneIndex][i].interact(u1x,u1y, u2x,u2y);
       }
     }
 
