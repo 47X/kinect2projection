@@ -172,15 +172,16 @@ void oscEvent(OscMessage theOscMessage) {
                         float y = theOscMessage.get(2).floatValue();
                         int z = theOscMessage.get(3).intValue();
 
+                        //NOTE bylo podowjne dodawanie age bo jest tez w samym update() obiektu
                         if (id == 1 ) {
-                                PVector prev1 = new PVector(raw1.x, raw1.y, raw1.z);
+                                //PVector prev1 = new PVector(raw1.x, raw1.y, raw1.z);
                                 raw1.set(x,y,z);
-                                if (raw1.x==prev1.x) {user1.age++;}else{user1.age=0;};
+                                //if (raw1.x==prev1.x) {user1.age++;}else{user1.age=0;};
                         }
                         if (id > 1 ) {
-                                PVector prev2 = new PVector(raw2.x, raw2.y, raw2.z);
+                                //PVector prev2 = new PVector(raw2.x, raw2.y, raw2.z);
                                 raw2.set(x,y,z);
-                                if (raw2.x==prev2.x) {user2.age++;}else{user2.age=0;};
+                                //if (raw2.x==prev2.x) {user2.age++;}else{user2.age=0;};
                         }
                         //println(" values: "+id+", "+x+", "+y+" "+z);
                         return;
@@ -202,7 +203,7 @@ void resoPosF(float X, float Y, float opacity,int layer){
         myBundle.add(myMessage);
         myMessage.clear();
         myMessage.setAddrPattern("/composition/layers/"+layer+"/video/opacity");
-        myMessage.add(1-(opacity/1025));
+        myMessage.add(1-(opacity/1025)); //HACK here
         myBundle.add(myMessage);
         oscP5reso.send(myBundle, resoOSCaddr);
         ///composition/layers/5/video/opacity

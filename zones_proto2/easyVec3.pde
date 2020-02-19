@@ -7,52 +7,54 @@ class easyVec3{
   float x, y, z;
   float easing = 0.15;
   int aging = 25;
-  
+
   int age = 0;
-  
+
   private int index = 0;
   private float[] hist = {0,0,0};
-  
-  //ArrayList<PVector> hist = new ArrayList<PVector>(); 
-  
+
+  //ArrayList<PVector> hist = new ArrayList<PVector>();
+
   easyVec3(){
   }
-  
+
   void update(){
     //calc easing
     PVector d = PVector.sub(raw, easy);
     d.mult(easing);
-    easy = PVector.add(easy ,d); 
+    easy = PVector.add(easy ,d);
     x = easy.x;
     y = easy.y;
     y = easy.z;
-    
-    
-        
+
+
+
     ////fill history and trim it
     hist[index] = raw.x;
     index = (index+1)%3;
-    
+
     //calc hist avg
     float sum = 0;
     for(int i = 0; i < hist.length; i ++){
       sum = sum + hist[i];
-    } 
-    
-    
+    }
+
+
     if(sum/hist.length==raw.x){
-      if (age<1024){
       age = age + aging;
-      }
       //println("Age is: "+ age);
     } else {
-      age = age - aging;
+      age = age - (10*aging);
     }
-    
+
     if (age<0){
       age =0;
     }
-    
+
+    if (age>1024){
+      age = 1024;
+    };
+
     ////fill history and trim it
     //hist.add(raw);
     //if (hist.size() > 5) {
@@ -62,7 +64,7 @@ class easyVec3{
     ////PVector old2pos = hist.get(2);
     ////PVector old3pos = hist.get(1);
     ////println(hist);
-    
+
     ////increase age if position stalled
     //if(hist.size()>3 && oldpos.x==raw.x){
     //  age ++;
@@ -70,9 +72,9 @@ class easyVec3{
     //} else {
     //  age = 0;
     //}
-  
+
     //hist.trimToSize();
   }
-  
+
 
 }//endclass

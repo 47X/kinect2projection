@@ -70,7 +70,7 @@ void resoSend(float X, float Y, float opacity,int layer){
         myBundle.add(myMessage);
         myMessage.clear();
         myMessage.setAddrPattern("/composition/layers/"+layer+"/video/opacity");
-        myMessage.add(1-opacity); //TEMP
+        myMessage.add(opacity); //TEMP (opacity)
         myBundle.add(myMessage);
         oscP5ResoZones.send(myBundle, resoAddress);
         ///composition/layers/5/video/opacity
