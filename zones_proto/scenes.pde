@@ -13,16 +13,13 @@ OscP5 oscP5ResoZones;
 NetAddress resoAddress = new NetAddress("127.0.0.1",7000);
 
 Scenes(){
-        println(" created zone id : ");
         for(int j = 0; j<zones.length; j++) {
                 for(int i = 0; i<zones[j].length; i++) {
                         zones[j][i] = new Zone((i+1)*80, (j+1)*80, (i+1)*(j+1)*10, (j*10)+i, i+2);
-                        print(zones[j][i].id+", ");
                 }
         }
-        println("\n zones randomly initialized , initializing OSC ...");
         oscP5ResoZones = new OscP5(this, 7777);
-        angle = 1;
+        angle = 0;
         minX = 0;
         minY =0;
         maxX=1280;
@@ -106,7 +103,7 @@ PVector resoPositionMapped(float x, float y, float minY, float maxY, float minX,
 }
 
 
-void saveDataToFile(String filename) {
+void saveZonesToFile(String filename) {
         PrintWriter output = createWriter(filename);
         for (int y=0; y<zones.length; y++) {
                 for(int i=0; i< zones[y].length; i++) {
@@ -117,7 +114,27 @@ void saveDataToFile(String filename) {
         output.close(); // Finishes the file
 }
 
-void loadDataFromFile(String filename) {
+void saveSetupToFile(String filename) {
+        PrintWriter output = createWriter(filename);
+        output.println(minX+";"+maxX+";"+minY+";"+maxY+";"+angle);
+        output.flush(); // Writes the remaining data to the file
+        output.close(); // Finishes the file
+}
+
+
+void loadSetupFromFile(String filename) {
+        String[] lines = loadStrings(filename);
+        String line = lines[0];
+        String[] pieces = split(line, ';');
+        minX = float(pieces[0]);
+        maxX = float(pieces[1]);
+        minY = float(pieces[2]);
+        maxY = float(pieces[3]);
+        angle = float(pieces[4]);
+}
+
+
+void loadZonesFromFile(String filename) {
         String[] lines = loadStrings(filename);
         int li=0;
         for (int y=0; y<zones.length; y++) {
@@ -133,10 +150,6 @@ void loadDataFromFile(String filename) {
                         li++;
                 }
         }
-
-
-
-
         // try {
         //
         // }
@@ -146,7 +159,5 @@ void loadDataFromFile(String filename) {
         // catch (ClassNotFoundException e) {
         //   e.printStackTrace();
         // }
-}
-
-
+  }
 }

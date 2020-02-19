@@ -5,15 +5,16 @@ int selectedZone=0;
 int stageSetupMode = 0; //0 false,  1 minXY, 2 maxXY, 3 angle
 
 Scenes data;
-String filename = "testdata.txt";
+String zonesFile = "testdata.txt";
+String stageSetupFile = "stagesetupdata.txt";
 
-
-///P3D!!!!
 void setup(){
         size(1280, 800, P3D);
         frameRate(30);
 
         data = new Scenes();
+        data.loadSetupFromFile(stageSetupFile);
+        data.loadZonesFromFile(zonesFile);
         //TODO load file
 
 }
@@ -65,11 +66,11 @@ void keyPressed(){
                 break;
         case 's':
                 println("Saving data to file...");
-                data.saveDataToFile(filename);
+                data.saveZonesToFile(zonesFile);
                 break;
         case 'l':
                 println("Loading data from file...");
-                data.loadDataFromFile(filename);
+                data.loadZonesFromFile(zonesFile);
                 //data.oscZones(currentSceneIndex, true);
                 break;
         case 'p':
@@ -238,4 +239,10 @@ void mouseDragged(){
     data.zones[currentSceneIndex][selectedZone].x = mouseX;
     data.zones[currentSceneIndex][selectedZone].y = mouseY;
   }
+}
+
+void exit(){
+  data.saveSetupToFile(stageSetupFile);
+  println("saved setup, exitig..");
+  super.exit();
 }
