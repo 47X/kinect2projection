@@ -7,7 +7,7 @@ class Scenes {
 
 public Zone[][] zones = new Zone[9][9];
 
-float angle = 1;
+float minX, minY, maxX, maxY, angle;
 
 OscP5 oscP5ResoZones;
 NetAddress resoAddress = new NetAddress("127.0.0.1",7000);
@@ -22,6 +22,11 @@ Scenes(){
         }
         println("\n zones randomly initialized , initializing OSC ...");
         oscP5ResoZones = new OscP5(this, 7777);
+        angle = 1;
+        minX = 0;
+        minY =0;
+        maxX=1280;
+        maxY=800;
 }
 
 void updateZones(int currentSceneIndex){
@@ -38,24 +43,18 @@ void interactZones(int currentSceneIndex, float u1x, float u1y, float u2x, float
 
 void oscZones(int currentSceneIndex, boolean all){ //if all than send osc irrespectable to active/state
         for(int i=0; i< zones[currentSceneIndex].length; i++) {
-                // float x = resoNorm(, 1280); ///!!! size
-                // float y = resoNorm(zones[currentSceneIndex][i].y, 800);
                 PVector pos = new PVector();
-                //PROTO
-                //pos = resoPosition(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y);
-                pos = resoPositionMapped(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y, 0,1, 0,1, angle);
+                pos = resoPositionMapped(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y, minY, maxY, minX, maxX, angle);
                 float st = zones[currentSceneIndex][i].state;
                 int lay = zones[currentSceneIndex][i].layer;
                 boolean active = zones[currentSceneIndex][i].active;
                 boolean editing = zones[currentSceneIndex][i].editing;
                 if((active&&(st>0))||editing) {
                         resoSend(pos.x,pos.y,st,lay);
-                        //resoSend(pos.x,pos.y,st,lay);
-                        //println("sending "+x +" " +y +" "+st+" to layer "+lay);
+
                 }
                 if(all) {
                         resoSend(pos.x,pos.y,st,lay);
-                        //println("sending "+x +" " +y +" "+st+" to layer "+lay);
                 }
 
         }
@@ -92,11 +91,11 @@ PVector resoPosition(float x, float y){
   return pos;
 }
 
-//TODO min max
-PVector resoPositionMapped(float x, float y, float maxY, float minY, float maxX, float minX, float angle){
-  //calc mapped
-  float X = map(x, 1,0, minX, maxX);
-  float Y = map(y, 1,0, minY, maxY);
+
+PVector resoPositionMapped(float x, float y, float minY, float maxY, float minX, float maxX, float angle){
+  //calc angle
+  float X = map(x, 0,1280, minX, maxX);
+  float Y = map(y, 0,800, minY, maxY);
   float factor = 1- (((Y)/800)*angle);
   X = ((X-640)*factor)+640;
   //normalize
