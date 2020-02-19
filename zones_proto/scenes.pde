@@ -40,7 +40,7 @@ void oscZones(int currentSceneIndex){
                 // float y = resoNorm(zones[currentSceneIndex][i].y, 800);
                 PVector pos = new PVector();
                 pos = resoPosition(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y);
-                float st = 1 - zones[currentSceneIndex][i].state;
+                float st = zones[currentSceneIndex][i].state;
                 int lay = zones[currentSceneIndex][i].layer;
                 boolean active = zones[currentSceneIndex][i].active;
                 boolean editing = zones[currentSceneIndex][i].editing;
