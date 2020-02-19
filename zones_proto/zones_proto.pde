@@ -12,6 +12,7 @@ void setup(){
         frameRate(30);
 
         data = new Scenes();
+        //TODO load file
 
 }
 
@@ -28,7 +29,7 @@ void draw(){
 
         data.updateZones(currentSceneIndex);
         data.interactZones(currentSceneIndex, u1x, u1y, u2x, u2y);
-        data.oscZones(currentSceneIndex);
+        data.oscZones(currentSceneIndex, false);
 
         if(zonesEditingMode) {
                 fill(255);
@@ -51,8 +52,18 @@ void keyPressed(){
         case 'l':
                 println("Loading data from file...");
                 data.loadDataFromFile(filename);
+                data.oscZones(currentSceneIndex, true);
                 break;
-
+        case '=':
+                data.angle+=0.05;
+                println("angle:"+data.angle);
+                data.oscZones(currentSceneIndex, true);
+                break;
+        case '-':
+                data.angle-=0.05;
+                println("angle:"+data.angle);
+                data.oscZones(currentSceneIndex, true);
+                break;
         }
 
 ///Zones editing mode / scene switching
@@ -106,11 +117,11 @@ void keyPressed(){
 
 
         } else {
-                //implement scene switching here
                 if(key>='1' & key<='9') {
                         int num=int(str(key))-1;
                         currentSceneIndex = min(num, data.zones.length-1);
                         println("Switching to scene index "+num);
+                        data.oscZones(currentSceneIndex, true);
                 }
         }
 ///END zones editing mode / scene switching

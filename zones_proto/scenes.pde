@@ -7,6 +7,8 @@ class Scenes {
 
 public Zone[][] zones = new Zone[9][9];
 
+float angle = 1;
+
 OscP5 oscP5ResoZones;
 NetAddress resoAddress = new NetAddress("127.0.0.1",7000);
 
@@ -34,20 +36,28 @@ void interactZones(int currentSceneIndex, float u1x, float u1y, float u2x, float
         }
 }
 
-void oscZones(int currentSceneIndex){
+void oscZones(int currentSceneIndex, boolean all){ //if all than send osc irrespectable to active/state
         for(int i=0; i< zones[currentSceneIndex].length; i++) {
                 // float x = resoNorm(, 1280); ///!!! size
                 // float y = resoNorm(zones[currentSceneIndex][i].y, 800);
                 PVector pos = new PVector();
-                pos = resoPosition(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y);
+                //PROTO
+                //pos = resoPosition(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y);
+                pos = resoPositionMapped(zones[currentSceneIndex][i].x, zones[currentSceneIndex][i].y, 0,1, 0,1, angle);
                 float st = zones[currentSceneIndex][i].state;
                 int lay = zones[currentSceneIndex][i].layer;
                 boolean active = zones[currentSceneIndex][i].active;
                 boolean editing = zones[currentSceneIndex][i].editing;
                 if((active&&(st>0))||editing) {
                         resoSend(pos.x,pos.y,st,lay);
+                        //resoSend(pos.x,pos.y,st,lay);
                         //println("sending "+x +" " +y +" "+st+" to layer "+lay);
                 }
+                if(all) {
+                        resoSend(pos.x,pos.y,st,lay);
+                        //println("sending "+x +" " +y +" "+st+" to layer "+lay);
+                }
+
         }
 }
 
@@ -64,7 +74,7 @@ void resoSend(float X, float Y, float opacity,int layer){
         myBundle.add(myMessage);
         myMessage.clear();
         myMessage.setAddrPattern("/composition/layers/"+layer+"/video/opacity");
-        myMessage.add(opacity);
+        myMessage.add(1-opacity); //TEMP
         myBundle.add(myMessage);
         oscP5ResoZones.send(myBundle, resoAddress);
         ///composition/layers/5/video/opacity
@@ -74,12 +84,28 @@ float resoNorm(int X, int max){
         return (X - (max / 2) + 16384) / 32768f;
 }
 
+//same as resoNorm but float
 PVector resoPosition(float x, float y){
   PVector pos = new PVector();
   pos.x = norm((x-(1280/2))/2,-16384, 16384);
   pos.y = norm((y-(800/2))/2, -16384, 16384);
   return pos;
 }
+
+//TODO min max
+PVector resoPositionMapped(float x, float y, float maxY, float minY, float maxX, float minX, float angle){
+  //calc mapped
+  float X = map(x, 1,0, minX, maxX);
+  float Y = map(y, 1,0, minY, maxY);
+  float factor = 1- (((Y)/800)*angle);
+  X = ((X-640)*factor)+640;
+  //normalize
+  PVector pos = new PVector();
+  pos.x = norm((X-(1280/2))/2,-16384, 16384);
+  pos.y = norm((Y-(800/2))/2, -16384, 16384);
+  return pos;
+}
+
 
 void saveDataToFile(String filename) {
         PrintWriter output = createWriter(filename);
